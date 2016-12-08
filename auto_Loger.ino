@@ -26,7 +26,7 @@ void setup() {
   while (!Serial) ; // wait for serial
   delay(200);
   Serial.println("");
-  Serial.println("-------начало работы ----------");
+  Serial.println("------- Begin Runer  ----------");
 }
 
 void loop() {
@@ -89,21 +89,15 @@ int read_temperatur(){
   // because the result is a 16 bit signed integer, it should
   // be stored to an "int16_t" type, which is always 16 bits
   // even when compiled on a 32 bit processor.
+//data[0] = 0x5E ; 
+//data[1] = 0xFF ;
 
   int16_t raw = (data[1] << 8) | data[0];
-
   
   celsius = (float)raw / 16.000;
-  temperature = (double)raw / 16.000; 
-  Serial.print(raw,BIN);
-  Serial.print("  ");
-  Serial.print(celsius);
-  Serial.print("  ");
-  Serial.print(temperature);
-  Serial.print("  ");
-  Serial.print(data[4],HEX);
-  
 
+  Serial.print(celsius,4);
+ 
 
   Serial.println(" ");
   
