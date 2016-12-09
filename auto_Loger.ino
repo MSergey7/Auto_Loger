@@ -5,7 +5,7 @@
 //содержание СМС: 
 //дата.время - температура //// "29.12.2016 15:54 = -2 Celcia"
 
-#include <Wire.h>
+#include <Wire.h> 
 #include <OneWire.h>
 #include <Time.h>
 #include <TimeLib.h>
@@ -14,13 +14,10 @@
 //инициализируем переменные
 OneWire  ds(10);  // on pin 10 (a 4.7K resistor is necessary) - датчик температуры DS18B20
 
-byte i;
-byte data[12];
-byte addr[8];
-float celsius;
-double temperature;  // измеренная температура
+byte i; //служебная переменная для циклов
+byte addr[8];  // для адреса 18B20
+String data_1;  
 
-  
 void setup() {
   Serial.begin(9600);
   while (!Serial) ; // wait for serial
@@ -34,42 +31,57 @@ void loop() {
 search_temperatur();
 
 //2. читаем температуру Функц
-read_temperatur();
-  
-}
+//read_temperatur();
+Serial.println(read_temperatur(),4); //для отладки
 
-//1. ищем датчик функ
-int search_temperatur(){
-  
+//3. читаем время 
+read_data_time();
+
+Serial.println(" " + data_1); //для отладки
+
+
+
+}
+//конец loop()
+//==============================================================================
+//==============================================================================
+
+
+// для вспомогательных функции
+
+//1. ищем датчик температуры функция
+int search_temperatur(){                //возврашает 1 если нашел датчик , 0 если не нашел.
 if ( !ds.search(addr)) {
-//    Serial.println("No more addresses.");
+//  Serial.println("No more addresses.");
     ds.reset_search();
     delay(250);
-  // снять все ремарки если нужно поменять разрешение
+// снять все ремарки если нужно поменять разрешение 
     ds.reset(); // сброс шины
-    ds.select(addr); //выставить адрес
+    ds.select(addr);// выставить адрес
     ds.write(0x4E); // разрешение записать конфиг
     ds.write(0x7F); // Th контроль температуры макс 128грд
-    ds.write(0xFF); //Tl контроль температуры мин -128грд
+    ds.write(0xFF); // Tl контроль температуры мин -128грд
     ds.write(0x60); // 0x60 12-бит разрешение, 0x00 -9бит разрешение
     return;
-  }
+}
 
  if (OneWire::crc8(addr, 7) != addr[7]) {
-     Serial.println("CRC is not valid!");
-      return 1 ;
-  }
+//     Serial.println("CRC is not valid!"); //
+      return 0 ;
+ }
  else{
 //  Serial.println("CRC is valid!");
-   return 0 ;
+   return 1 ;
  }
-
-
-
 }
 
 //2. читаем температуру Функц
-int read_temperatur(){
+float read_temperatur(){
+// локальные переменные для функции
+byte data[12]; // для данных 18B20
+
+float celsius;  // измеренная температура
+  
   ds.reset();
   ds.select(addr);
 //  ds.write(0xCC, 1);        // Команда пропуск ROM.
@@ -91,15 +103,41 @@ int read_temperatur(){
   // even when compiled on a 32 bit processor.
 //data[0] = 0x5E ; 
 //data[1] = 0xFF ;
-
   int16_t raw = (data[1] << 8) | data[0];
-  
   celsius = (float)raw / 16.000;
-
-  Serial.print(celsius,4);
- 
-
-  Serial.println(" ");
-  
+//  Serial.print(celsius,4);
+//  Serial.println(" ");
+return celsius ;  
 }
+
+//3. читаем дату время из таймера
+int  read_data_time() {
+
+
+  
+//data1[] = "03.12.2016 14:18";
+data_1 = "03.12.2016 14:18" ;
+
+
+
+return 1;
+}
+
+
+//4. функция пишет два символа если одна цифра 
+String print2digits(int number) {
+String str1 = "";
+
+  if (number >= 0 && number < 10) {
+    str1 = '0'; 
+    str1 = str1 + (String)number;  
+//    Serial.write('0');
+  }
+else {  
+ str1 = (String)number;
+}
+//Serial.println(str1); //для отладки
+return str1 ;
+}
+
 
