@@ -16,7 +16,7 @@ OneWire  ds(10);  // on pin 10 (a 4.7K resistor is necessary) - датчик т�
 
 byte i; //служебная переменная для циклов
 byte addr[8];  // для адреса 18B20
-String data_1;  
+String data_1;  //
 
 void setup() {
   Serial.begin(9600);
@@ -37,7 +37,7 @@ Serial.println(read_temperatur(),4); //для отладки
 //3. читаем время 
 read_data_time();
 
-Serial.println(" " + data_1); //для отладки
+Serial.println("yy " + data_1); //для отладки
 
 
 
@@ -112,15 +112,35 @@ return celsius ;
 
 //3. читаем дату время из таймера
 int  read_data_time() {
+data_1 = "";
+  tmElements_t tm;
+
+//data_1 = print2digits(tm.Day) +'.'+ print2digits(tm.Month)+ '.' + print2digits(tm.Year) +" " + print2digits(tm.Hour) + ':'+ print2digits(tm.Minute)+':'+ print2digits(tm.Second);
+
+data_1 = data_1 + tm.Second;
+ 
+ /*   Serial.print("Ok, Time = ");
+    print2digits(tm.Hour);
+    Serial.write(':');
+    print2digits(tm.Minute);
+    Serial.write(':');
+    print2digits(tm.Second);
+    Serial.print(", Date (D/M/Y) = ");
+    Serial.print(tm.Day);
+    Serial.write('/');
+    Serial.print(tm.Month);
+    Serial.write('/');
+    Serial.print(tmYearToCalendar(tm.Year));
+    Serial.println();
+ 
+*/  
 
 
-  
-//data1[] = "03.12.2016 14:18";
-data_1 = "03.12.2016 14:18" ;
-
-
-
+//data_1 = "03.12.2016 14:18" ;
 return 1;
+
+
+
 }
 
 
