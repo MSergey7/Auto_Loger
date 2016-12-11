@@ -7,7 +7,7 @@
 
 #include <Wire.h> 
 #include <OneWire.h>
-#include <Time.h>
+//#include <Time.h>
 #include <TimeLib.h>
 #include <DS1307RTC.h>
 
@@ -114,12 +114,13 @@ return celsius ;
 int  read_data_time() {
 data_1 = "";
   tmElements_t tm;
+RTC.read(tm);
+data_1 = print2digits(tm.Day) +'.'+ print2digits(tm.Month)+ '.' + tmYearToCalendar(tm.Year) +" " + print2digits(tm.Hour) + ':'+ print2digits(tm.Minute)+':'+ print2digits(tm.Second);
 
-//data_1 = print2digits(tm.Day) +'.'+ print2digits(tm.Month)+ '.' + print2digits(tm.Year) +" " + print2digits(tm.Hour) + ':'+ print2digits(tm.Minute)+':'+ print2digits(tm.Second);
+//data_1 = tm.Second;
 
-data_1 = data_1 + tm.Second;
- 
- /*   Serial.print("Ok, Time = ");
+/* 
+    Serial.print("Ok, Time = ");
     print2digits(tm.Hour);
     Serial.write(':');
     print2digits(tm.Minute);
@@ -133,7 +134,7 @@ data_1 = data_1 + tm.Second;
     Serial.print(tmYearToCalendar(tm.Year));
     Serial.println();
  
-*/  
+ */  
 
 
 //data_1 = "03.12.2016 14:18" ;
