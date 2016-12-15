@@ -7,7 +7,6 @@
 
 #include <Wire.h> 
 #include <OneWire.h>
-//#include <Time.h>
 #include <TimeLib.h>
 #include <DS1307RTC.h>
 
@@ -37,7 +36,7 @@ Serial.println(read_temperatur(),4); //для отладки
 //3. читаем время 
 read_data_time();
 
-Serial.println("yy " + data_1); //для отладки
+Serial.println("=> " + data_1); //для отладки
 
 
 
